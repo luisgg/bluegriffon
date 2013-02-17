@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+BLUEGRIFFON_DIR = bluegriffon
+%:
+	dh $@
+
+override_dh_auto_clean:
+	for f in bluegriffon bluegriffon-data; do rm -f debian/$$f.install ; done
+	rm -rf $(BLUEGRIFFON_DIR)
+
+override_dh_install:
+ifeq ($(DEB_BUILD_ARCH),amd64)
+	tar xjf bluegriffon-*-x86_64.tar.bz2
+else
+	tar xjf bluegriffon-*-i686.tar.bz2
+endif
+
+	for f in bluegriffon bluegriffon-data; do sed -e "s%BlueGriffon%$(BLUEGRIFFON_DIR)%g" debian/$$f.install.in > debian/$$f.install ; done
+	chmod -x $(BLUEGRIFFON_DIR)/distribution/extensions/*.xpi
+	chmod -x $(BLUEGRIFFON_DIR)/modules/devtools/*.jsm
+	chmod -x $(BLUEGRIFFON_DIR)/modules/accessibility/*.jsm
+	chmod -x $(BLUEGRIFFON_DIR)/components/*.js
+
+	dh_install
+
+	[ ! -d debian/bluegriffon-data/usr/share/bluegriffon/components ] || mv debian/bluegriffon-data/usr/share/bluegriffon/components/*.so debian/bluegriffon/usr/lib/bluegriffon/
+
+override_dh_shlibdeps:
+	dh_shlibdeps -l$(CURDIR)/debian/bluegriffon/usr/lib/bluegriffon
