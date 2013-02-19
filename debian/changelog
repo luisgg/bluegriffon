@@ -1,3 +1,9 @@
+bluegriffon (1.6.1-0~aurex2) precise; urgency=low
+
+  * Remove bluegriffon-data package
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 19 Feb 2013 15:30:06 +0100
+
 bluegriffon (1.6.1-0~aurex1) precise; urgency=low
 
   *  New upstream version
